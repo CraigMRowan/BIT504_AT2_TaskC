@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	private final static Color BACKGROUND_COLOUR = Color.BLACK;
@@ -42,4 +44,9 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	public void actionPerformed(ActionEvent event) {
 		update();
 	}
+	
+	@Override
+	 public void paintComponent(Graphics g) {
+	     super.paintComponent(g);
+	 }
 }
