@@ -22,6 +22,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
         setBackground(BACKGROUND_COLOUR);
         Timer timer = new Timer(TIMER_DELAY, this);
         timer.start();
+        addKeyListener(this);
+        setFocusable(true);
     }
 	
 	private void update() {
@@ -34,6 +36,8 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
                 break;
             }
             case PLAYING: {
+            	moveObject(paddle1);
+                moveObject(paddle2);
             	moveObject(ball);
                 checkWallBounce();
                 break;
@@ -51,16 +55,28 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	@Override
-	public void keyPressed(KeyEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void keyPressed(KeyEvent event) {
+		if(event.getKeyCode() == KeyEvent.VK_W) {
+            paddle1.setyVelocity(-1);
+        } else if(event.getKeyCode() == KeyEvent.VK_S) {
+            paddle1.setyVelocity(1);
+        }
+		if(event.getKeyCode() == KeyEvent.VK_UP) {
+			paddle2.setyVelocity(-1);
+		} else if(event.getKeyCode() == KeyEvent.VK_DOWN) {
+            paddle2.setyVelocity(1);
+        }
+    }
 
-	@Override
-	public void keyReleased(KeyEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
+   @Override
+   public void keyReleased(KeyEvent event) {
+	   if(event.getKeyCode() == KeyEvent.VK_W || event.getKeyCode() == KeyEvent.VK_S) {
+           paddle1.setyVelocity(0);
+       }
+       if(event.getKeyCode() == KeyEvent.VK_UP || event.getKeyCode() == KeyEvent.VK_DOWN) {
+           paddle2.setyVelocity(0);
+       }
+   }
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
@@ -108,13 +124,19 @@ public class PongPanel extends JPanel implements ActionListener, KeyListener {
 		if(ball.getxPosition() <= 0) {
 			// Hit left side of screen
 			ball.setxVelocity(-ball.getxVelocity());
+			resetBall();
 		} else if(ball.getxPosition() >= getWidth() - ball.getWidth()) {
 			// Hit right side of screen
 			ball.setxVelocity(-ball.getxVelocity());
+			resetBall();
 		}
 		if(ball.getyPosition() <= 0 || ball.getyPosition() >= getHeight() - ball.getHeight()) {
 			// Hit top or bottom of screen
 			ball.setyVelocity(-ball.getyVelocity());
 		}
 	}
+	
+	private void resetBall() {
+        ball.resetToInitialPosition();
+    }
 }
